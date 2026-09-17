@@ -43,9 +43,14 @@ export function RequestDialog({
     );
 
   const submit = () => {
-    if (!from || !to) return toast.error("Укажите срок размещения");
-    if (placement.kind !== "online" && selected.length === 0)
-      return toast.error("Выберите хотя бы один торговый объект");
+    if (!from || !to) {
+      toast.error("Укажите срок размещения");
+      return;
+    }
+    if (placement.kind !== "online" && selected.length === 0) {
+      toast.error("Выберите хотя бы один торговый объект");
+      return;
+    }
 
     const items: RequestItem[] =
       placement.kind === "online"

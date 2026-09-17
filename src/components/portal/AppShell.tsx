@@ -36,7 +36,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (user === null) {
       const raw = typeof window !== "undefined" ? localStorage.getItem("evrotorg-media-session-v1") : null;
-      if (!raw) navigate({ to: "/login" });
+      if (!raw) navigate({ to: "/" });
     }
   }, [user, navigate]);
 
@@ -75,7 +75,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <button
                 onClick={() => {
                   logout();
-                  navigate({ to: "/login" });
+                  navigate({ to: "/" });
                 }}
                 className="rounded-full border border-border px-4 py-1.5 font-semibold transition-colors hover:bg-muted"
               >
