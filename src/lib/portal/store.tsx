@@ -26,7 +26,7 @@ export type AdRequest = {
   total: number;
   stage: RequestStage;
   status: string;
-  comment?: string;
+  comment?: string | undefined;
   history: HistoryEntry[];
 };
 
@@ -85,8 +85,8 @@ export const stageForRole = (role: Role): RequestStage | null =>
   role === "legal" ? "legal" : role === "retail" ? "retail" : role === "marketing" ? "marketing" : null;
 
 function seed(): State {
-  const p1 = PLACEMENTS[0];
-  const p2 = PLACEMENTS[5];
+  const p1 = PLACEMENTS[0]!;
+  const p2 = PLACEMENTS[5]!;
   const created = new Date(Date.now() - 86400000 * 3).toISOString();
   const req: AdRequest = {
     id: "r1",
@@ -108,7 +108,7 @@ function seed(): State {
     history: [{ at: created, text: "Заявка создана в кабинете" }],
   };
   const created2 = new Date(Date.now() - 86400000 * 9).toISOString();
-  const p3 = PLACEMENTS[3];
+  const p3 = PLACEMENTS[3]!;
   const req2: AdRequest = {
     id: "r2",
     number: "ЗЯВ-1000",
@@ -276,7 +276,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
       const requests = [...prev.requests];
       const idx = requests.findIndex((r) => r.id === id);
       if (idx === -1) return prev;
-      const req = { ...requests[idx] };
+      const req = { ...requests[idx]! };
       const roleName = role === "legal" ? "Юристы" : role === "retail" ? "Розница" : "Маркетинг";
       let invoices = prev.invoices;
       let notifications = prev.notifications;
