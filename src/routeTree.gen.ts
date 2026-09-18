@@ -10,15 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdsRouteImport } from './routes/ads'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as InvoicesRouteImport } from './routes/invoices'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as OfflineRouteImport } from './routes/offline'
+import { Route as QueueRouteImport } from './routes/queue'
 import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as TicketsRouteImport } from './routes/tickets'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdsRoute = AdsRouteImport.update({
@@ -36,6 +45,21 @@ const InvoicesRoute = InvoicesRouteImport.update({
   path: '/invoices',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfflineRoute = OfflineRouteImport.update({
+  id: '/offline',
+  path: '/offline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QueueRoute = QueueRouteImport.update({
+  id: '/queue',
+  path: '/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RequestsRoute = RequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
@@ -49,50 +73,89 @@ const TicketsRoute = TicketsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/ads': typeof AdsRoute
   '/analytics': typeof AnalyticsRoute
   '/invoices': typeof InvoicesRoute
+  '/notifications': typeof NotificationsRoute
+  '/offline': typeof OfflineRoute
+  '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
   '/tickets': typeof TicketsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/ads': typeof AdsRoute
   '/analytics': typeof AnalyticsRoute
   '/invoices': typeof InvoicesRoute
+  '/notifications': typeof NotificationsRoute
+  '/offline': typeof OfflineRoute
+  '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
   '/tickets': typeof TicketsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/ads': typeof AdsRoute
   '/analytics': typeof AnalyticsRoute
   '/invoices': typeof InvoicesRoute
+  '/notifications': typeof NotificationsRoute
+  '/offline': typeof OfflineRoute
+  '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
   '/tickets': typeof TicketsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/ads' | '/analytics' | '/invoices' | '/requests' | '/tickets'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ads' | '/analytics' | '/invoices' | '/requests' | '/tickets'
-  id:
-    | '__root__'
     | '/'
+    | '/admin'
     | '/ads'
     | '/analytics'
     | '/invoices'
+    | '/notifications'
+    | '/offline'
+    | '/queue'
+    | '/requests'
+    | '/tickets'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/ads'
+    | '/analytics'
+    | '/invoices'
+    | '/notifications'
+    | '/offline'
+    | '/queue'
+    | '/requests'
+    | '/tickets'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/ads'
+    | '/analytics'
+    | '/invoices'
+    | '/notifications'
+    | '/offline'
+    | '/queue'
     | '/requests'
     | '/tickets'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AdsRoute: typeof AdsRoute
   AnalyticsRoute: typeof AnalyticsRoute
   InvoicesRoute: typeof InvoicesRoute
+  NotificationsRoute: typeof NotificationsRoute
+  OfflineRoute: typeof OfflineRoute
+  QueueRoute: typeof QueueRoute
   RequestsRoute: typeof RequestsRoute
   TicketsRoute: typeof TicketsRoute
 }
@@ -104,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ads': {
@@ -127,6 +197,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvoicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offline': {
+      id: '/offline'
+      path: '/offline'
+      fullPath: '/offline'
+      preLoaderRoute: typeof OfflineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/queue': {
+      id: '/queue'
+      path: '/queue'
+      fullPath: '/queue'
+      preLoaderRoute: typeof QueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/requests': {
       id: '/requests'
       path: '/requests'
@@ -146,9 +237,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AdsRoute: AdsRoute,
   AnalyticsRoute: AnalyticsRoute,
   InvoicesRoute: InvoicesRoute,
+  NotificationsRoute: NotificationsRoute,
+  OfflineRoute: OfflineRoute,
+  QueueRoute: QueueRoute,
   RequestsRoute: RequestsRoute,
   TicketsRoute: TicketsRoute,
 }
