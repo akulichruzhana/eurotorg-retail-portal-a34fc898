@@ -46,7 +46,6 @@ function OfflinePage() {
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {PLACEMENTS.map((p) => (
             <div key={p.id} className="flex flex-col rounded-2xl border border-border bg-card p-5">
-              <p className="text-xs font-medium text-brand-dark">{p.kindLabel}</p>
               <h3 className="mt-1 font-bold">{p.name}</h3>
               <p className="mt-2 flex-1 text-sm text-muted-foreground">{p.description}</p>
               <p className="mt-3 font-bold">{formatMoney(p.price)}</p>
