@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { STORES, formatMoney, type Placement } from "@/lib/portal/data";
+import { STORES, STORE_FORMATS, formatMoney, type Placement } from "@/lib/portal/data";
 import { usePortal, type RequestItem } from "@/lib/portal/store";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const MAX_ITEMS = 12;
 
@@ -23,19 +24,17 @@ export function RequestDialog({
   const [selected, setSelected] = useState<string[]>([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [search, setSearch] = useState("");
+  const [format, setFormat] = useState("");
 
-  const stores = useMemo(
-    () =>
-      placement?.kind === "online"
-        ? []
-        : STORES.filter((s) => !placement || placement.storeFormats.includes(s.format)),
-    [placement],
-  );
+  const stores = useMemo(() => STORES.filter((s) =>
+    (!format || s.format === format) &&
+    (!search.trim() || `${s.address} ${s.number}`.toLocaleLowerCase("ru").includes(search.trim().toLocaleLowerCase("ru")))
+  ), [format, search]);
 
   if (!open || !placement) return null;
-
   const positions = placement.kind === "online" ? 1 : selected.length;
-  const total = positions * placement.price;
+  const total = placement.price === null ? null : positions * placement.price;
 
   const toggle = (id: string) =>
     setSelected((prev) =>
@@ -43,8 +42,8 @@ export function RequestDialog({
     );
 
   const submit = () => {
-    if (!from || !to) {
-      toast.error("Укажите срок размещения");
+    if (!from || !to || to < from) {
+      toast.error("Укажите корректный срок размещения");
       return;
     }
     if (placement.kind !== "online" && selected.length === 0) {
@@ -60,19 +59,20 @@ export function RequestDialog({
               placementName: placement.name,
               storeId: "online",
               storeAddress: "Онлайн-канал",
-              price: placement.price,
+              price: placement.price ?? 0,
             },
           ]
         : selected.map((id) => {
-            const s = STORES.find((x) => x.id === id)!;
+            const s = STORES.find((x) => x.id === id);
+            if (!s) return null;
             return {
               placementId: placement.id,
               placementName: placement.name,
               storeId: s.id,
-              storeAddress: `${s.address}, ${s.city}`,
-              price: placement.price,
+              storeAddress: `${s.address} · ${s.format} · ${s.number}`,
+              price: placement.price ?? 0,
             };
-          });
+          }).filter((item): item is RequestItem => item !== null);
 
     const req = createRequest({
       items,
@@ -99,9 +99,9 @@ export function RequestDialog({
               {formatMoney(placement.price)} · {placement.unit}
             </p>
           </div>
-          <button onClick={onClose} className="rounded-full px-3 py-1 text-sm hover:bg-muted">
+          <Button variant="ghost" onClick={onClose}>
             Закрыть
-          </button>
+          </Button>
         </div>
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -167,12 +167,12 @@ export function RequestDialog({
             <p className="text-lg font-bold">Итого: {formatMoney(total)}</p>
             <p className="text-xs text-muted-foreground">{positions} позиц. · период размещения</p>
           </div>
-          <button
+          <Button
             onClick={submit}
             className="rounded-full bg-brand px-6 py-3 font-bold text-primary-foreground transition-colors hover:bg-brand-dark"
           >
             Отправить заявку
-          </button>
+          </Button>
         </div>
       </div>
     </div>
