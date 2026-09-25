@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { STORES, formatMoney, type Placement } from "@/lib/portal/data";
+import { STORES, STORE_FORMATS, formatMoney, type Placement } from "@/lib/portal/data";
 import { usePortal, type RequestItem } from "@/lib/portal/store";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const MAX_ITEMS = 12;
 
@@ -23,19 +24,17 @@ export function RequestDialog({
   const [selected, setSelected] = useState<string[]>([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [search, setSearch] = useState("");
+  const [format, setFormat] = useState("");
 
-  const stores = useMemo(
-    () =>
-      placement?.kind === "online"
-        ? []
-        : STORES.filter((s) => !placement || placement.storeFormats.includes(s.format)),
-    [placement],
-  );
+  const stores = useMemo(() => STORES.filter((s) =>
+    (!format || s.format === format) &&
+    (!search.trim() || `${s.address} ${s.number}`.toLocaleLowerCase("ru").includes(search.trim().toLocaleLowerCase("ru")))
+  ), [format, search]);
 
   if (!open || !placement) return null;
-
   const positions = placement.kind === "online" ? 1 : selected.length;
-  const total = positions * placement.price;
+  const total = placement.price === null ? null : positions * placement.price;
 
   const toggle = (id: string) =>
     setSelected((prev) =>
@@ -43,8 +42,8 @@ export function RequestDialog({
     );
 
   const submit = () => {
-    if (!from || !to) {
-      toast.error("Укажите срок размещения");
+    if (!from || !to || to < from) {
+      toast.error("Укажите корректный срок размещения");
       return;
     }
     if (placement.kind !== "online" && selected.length === 0) {
@@ -60,19 +59,20 @@ export function RequestDialog({
               placementName: placement.name,
               storeId: "online",
               storeAddress: "Онлайн-канал",
-              price: placement.price,
+              price: placement.price ?? 0,
             },
           ]
         : selected.map((id) => {
-            const s = STORES.find((x) => x.id === id)!;
+            const s = STORES.find((x) => x.id === id);
+            if (!s) return null;
             return {
               placementId: placement.id,
               placementName: placement.name,
               storeId: s.id,
-              storeAddress: `${s.address}, ${s.city}`,
-              price: placement.price,
+              storeAddress: `${s.address} · ${s.format} · ${s.number}`,
+              price: placement.price ?? 0,
             };
-          });
+          }).filter((item): item is RequestItem => item !== null);
 
     const req = createRequest({
       items,
@@ -93,15 +93,14 @@ export function RequestDialog({
       <div className="w-full max-w-2xl rounded-3xl bg-card p-6 shadow-xl">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-medium text-brand-dark">{placement.kindLabel}</p>
             <h2 className="text-xl font-bold">{placement.name}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              {formatMoney(placement.price)} · {placement.unit}
+              {formatMoney(placement.price)}
             </p>
           </div>
-          <button onClick={onClose} className="rounded-full px-3 py-1 text-sm hover:bg-muted">
+          <Button variant="ghost" onClick={onClose}>
             Закрыть
-          </button>
+          </Button>
         </div>
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -137,6 +136,14 @@ export function RequestDialog({
                 выбрано {selected.length} из {MAX_ITEMS}
               </span>
             </div>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <input aria-label="Поиск торгового объекта по адресу или номеру" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Адрес или номер ТО" className="w-full rounded-md border border-input bg-card px-3 py-2 text-sm" />
+              <select aria-label="Формат торгового объекта" value={format} onChange={(e) => setFormat(e.target.value)} className="w-full rounded-md border border-input bg-card px-3 py-2 text-sm">
+                <option value="">Все форматы</option>
+                {STORE_FORMATS.map((f) => <option key={f} value={f}>{f}</option>)}
+              </select>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">Найдено: {stores.length}</p>
             <div className="mt-2 max-h-64 space-y-1 overflow-y-auto rounded-xl border border-border p-2">
               {stores.map((s) => (
                 <label
@@ -148,16 +155,18 @@ export function RequestDialog({
                 >
                   <input
                     type="checkbox"
+                    disabled={!selected.includes(s.id) && selected.length >= MAX_ITEMS}
                     checked={selected.includes(s.id)}
                     onChange={() => toggle(s.id)}
                     className="size-4 accent-[var(--brand)]"
                   />
                   <span className="flex-1">
-                    {s.address}, {s.city} · {s.number}
+                    {s.address} · {s.number}
                   </span>
                   <span className="text-xs text-muted-foreground">{s.format}</span>
                 </label>
               ))}
+              {!stores.length && <p className="p-3 text-sm text-muted-foreground">Ничего не найдено.</p>}
             </div>
           </div>
         )}
@@ -167,12 +176,12 @@ export function RequestDialog({
             <p className="text-lg font-bold">Итого: {formatMoney(total)}</p>
             <p className="text-xs text-muted-foreground">{positions} позиц. · период размещения</p>
           </div>
-          <button
+          <Button
             onClick={submit}
             className="rounded-full bg-brand px-6 py-3 font-bold text-primary-foreground transition-colors hover:bg-brand-dark"
           >
             Отправить заявку
-          </button>
+          </Button>
         </div>
       </div>
     </div>

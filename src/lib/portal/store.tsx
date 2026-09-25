@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { PLACEMENTS, USERS, type PortalUser, type Role } from "./data";
+import { USERS, type PortalUser, type Role } from "./data";
 
 export type RequestStage = "legal" | "retail" | "marketing" | "done" | "rejected";
 
@@ -85,82 +85,7 @@ export const stageForRole = (role: Role): RequestStage | null =>
   role === "legal" ? "legal" : role === "retail" ? "retail" : role === "marketing" ? "marketing" : null;
 
 function seed(): State {
-  const p1 = PLACEMENTS[0]!;
-  const p2 = PLACEMENTS[5]!;
-  const created = new Date(Date.now() - 86400000 * 3).toISOString();
-  const req: AdRequest = {
-    id: "r1",
-    number: "ЗЯВ-1001",
-    org: "ООО «Альфа»",
-    author: "alpha",
-    source: "portal",
-    createdAt: created,
-    periodFrom: "2026-10-01",
-    periodTo: "2026-10-31",
-    items: [
-      { placementId: p1.id, placementName: p1.name, storeId: "s1", storeAddress: "ул. Нёманская, 18А, Минск", price: p1.price },
-      { placementId: p1.id, placementName: p1.name, storeId: "s2", storeAddress: "ул. Тарханова, 15, Минск", price: p1.price },
-      { placementId: p2.id, placementName: p2.name, storeId: "online", storeAddress: "Онлайн-канал", price: p2.price },
-    ],
-    total: p1.price * 2 + p2.price,
-    stage: "legal",
-    status: STAGE_LABEL.legal,
-    history: [{ at: created, text: "Заявка создана в кабинете" }],
-  };
-  const created2 = new Date(Date.now() - 86400000 * 9).toISOString();
-  const p3 = PLACEMENTS[3]!;
-  const req2: AdRequest = {
-    id: "r2",
-    number: "ЗЯВ-1000",
-    org: "ООО «Альфа»",
-    author: "operator",
-    source: "offline",
-    createdAt: created2,
-    periodFrom: "2026-09-01",
-    periodTo: "2026-09-30",
-    items: [
-      { placementId: p3.id, placementName: p3.name, storeId: "s4", storeAddress: "ул. Болеслава Берута, 3Б, Минск", price: p3.price },
-    ],
-    total: p3.price,
-    stage: "done",
-    status: STAGE_LABEL.done,
-    history: [
-      { at: created2, text: "Заявка заведена оператором (офлайн)" },
-      { at: created2, text: "Юристы: принято" },
-      { at: created2, text: "Розница: принято" },
-      { at: created2, text: "Маркетинг: принято" },
-    ],
-  };
-  return {
-    requests: [req, req2],
-    invoices: [
-      {
-        id: "i1",
-        number: "СЧ-2026-0007",
-        requestNumber: "ЗЯВ-1000",
-        org: "ООО «Альфа»",
-        amount: p3.price,
-        createdAt: created2,
-        status: "Черновик",
-      },
-    ],
-    tickets: [
-      {
-        id: "t1",
-        subject: "Не отображается счёт",
-        message: "Заявка согласована, а счёт не появился в разделе «Счета».",
-        author: "alpha",
-        org: "ООО «Альфа»",
-        createdAt: created2,
-        status: "Закрыт",
-        answers: [{ at: created2, text: "Поддержка: счёт сформирован, проверьте раздел «Счета»." }],
-      },
-    ],
-    notifications: [
-      { id: "n1", text: "Заявка ЗЯВ-1000 согласована. Сформирован счёт СЧ-2026-0007.", createdAt: created2, read: false, org: "ООО «Альфа»" },
-      { id: "n2", text: "Заявка ЗЯВ-1001 отправлена на согласование (юристы).", createdAt: created, read: false, org: "ООО «Альфа»" },
-    ],
-  };
+  return { requests: [], invoices: [], tickets: [], notifications: [] };
 }
 
 type Ctx = {
@@ -302,8 +227,8 @@ export function PortalProvider({ children }: { children: ReactNode }) {
             createdAt: now(),
             status: "Черновик",
           };
-          invoices = [inv, ...invoices];
-          notifications = [notify(`Заявка ${req.number} согласована. Сформирован счёт ${inv.number}.`, req.org), ...notifications];
+          invoices = req.total > 0 ? [inv, ...invoices] : invoices;
+          notifications = [notify(req.total > 0 ? `Заявка ${req.number} согласована. Сформирован счёт ${inv.number}.` : `Заявка ${req.number} согласована. Стоимость уточняется.`, req.org), ...notifications];
         } else {
           notifications = [notify(`Заявка ${req.number}: ${STAGE_LABEL[next].toLowerCase()}.`, req.org), ...notifications];
         }

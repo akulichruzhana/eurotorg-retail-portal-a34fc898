@@ -11,6 +11,8 @@ export const Route = createFileRoute("/tickets")({
       { name: "description", content: "Обращения в поддержку портала Евроторг Media: тема, сообщение, статус обращения." },
       { property: "og:title", content: "Тикеты — Евроторг Media" },
       { property: "og:description", content: "Обращения в поддержку портала Евроторг Media." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: TicketsPage,

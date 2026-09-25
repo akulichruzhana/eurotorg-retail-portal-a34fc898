@@ -12,6 +12,8 @@ export const Route = createFileRoute("/admin")({
       { name: "description", content: "Администрирование портала: пользователи и роли, тарифы рекламных размещений, сводка по заявкам." },
       { property: "og:title", content: "Админ — Евроторг Media" },
       { property: "og:description", content: "Пользователи, роли и тарифы портала Евроторг Media." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AdminPage,

@@ -12,6 +12,8 @@ export const Route = createFileRoute("/requests")({
       { name: "description", content: "Статусы и история заявок на рекламные размещения в сети Евроопт." },
       { property: "og:title", content: "Мои заявки — Евроторг Media" },
       { property: "og:description", content: "Статусы и история заявок на рекламные размещения." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: RequestsPage,

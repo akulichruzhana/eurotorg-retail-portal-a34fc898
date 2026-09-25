@@ -12,6 +12,8 @@ export const Route = createFileRoute("/queue")({
       { name: "description", content: "Заявки, ожидающие согласования: юридическая, розничная и финальная маркетинговая ступень." },
       { property: "og:title", content: "Очередь согласования — Евроторг Media" },
       { property: "og:description", content: "Заявки, ожидающие согласования сотрудниками Евроторга." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: QueuePage,

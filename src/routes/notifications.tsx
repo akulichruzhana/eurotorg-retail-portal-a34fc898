@@ -11,6 +11,8 @@ export const Route = createFileRoute("/notifications")({
       { name: "description", content: "Лента событий портала: смены статусов заявок, сформированные счета и ответы по тикетам." },
       { property: "og:title", content: "Уведомления — Евроторг Media" },
       { property: "og:description", content: "Лента событий по заявкам, счетам и тикетам." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: NotificationsPage,

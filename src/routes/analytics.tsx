@@ -13,6 +13,8 @@ export const Route = createFileRoute("/analytics")({
       { name: "description", content: "Обезличенные агрегаты: категории ABC, связи корзины, сегменты аудиторий для рекламных кампаний." },
       { property: "og:title", content: "Аналитика — Евроторг Media" },
       { property: "og:description", content: "Категории ABC, lift-пары и сегменты аудиторий без персональных данных." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AnalyticsPage,
