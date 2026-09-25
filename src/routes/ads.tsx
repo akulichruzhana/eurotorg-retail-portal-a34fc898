@@ -18,6 +18,8 @@ export const Route = createFileRoute("/ads")({
       { name: "description", content: "Витрина офлайн- и онлайн-размещений сети Евроопт: форматы, цены, оформление заявки." },
       { property: "og:title", content: "Каталог размещений — Евроторг Media" },
       { property: "og:description", content: "Витрина офлайн- и онлайн-размещений сети Евроопт." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AdsPage,

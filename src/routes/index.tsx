@@ -10,6 +10,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Корпоративный портал рекламных размещений торговой сети Евроопт: каталог, заявки, согласование, аналитика." },
       { property: "og:title", content: "Вход — Евроторг Media" },
       { property: "og:description", content: "Корпоративный портал рекламных размещений торговой сети Евроопт." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: LoginPage,

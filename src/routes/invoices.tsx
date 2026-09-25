@@ -10,6 +10,8 @@ export const Route = createFileRoute("/invoices")({
       { name: "description", content: "Счета по согласованным заявкам на рекламные размещения (черновик, без электронной подписи)." },
       { property: "og:title", content: "Счета — Евроторг Media" },
       { property: "og:description", content: "Счета по согласованным заявкам на рекламные размещения." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: InvoicesPage,

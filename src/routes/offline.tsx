@@ -13,6 +13,8 @@ export const Route = createFileRoute("/offline")({
       { name: "description", content: "Оформление заявки от имени клиента, полученной по телефону или при визите, с тем же маршрутом согласования." },
       { property: "og:title", content: "Завести офлайн-заявку — Евроторг Media" },
       { property: "og:description", content: "Заявка от имени клиента, оформленная вне кабинета." },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary" },
     ],
   }),
   component: OfflinePage,
