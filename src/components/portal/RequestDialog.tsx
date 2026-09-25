@@ -93,10 +93,9 @@ export function RequestDialog({
       <div className="w-full max-w-2xl rounded-3xl bg-card p-6 shadow-xl">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-medium text-brand-dark">{placement.kindLabel}</p>
             <h2 className="text-xl font-bold">{placement.name}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              {formatMoney(placement.price)} · {placement.unit}
+              {formatMoney(placement.price)}
             </p>
           </div>
           <Button variant="ghost" onClick={onClose}>
@@ -137,6 +136,14 @@ export function RequestDialog({
                 выбрано {selected.length} из {MAX_ITEMS}
               </span>
             </div>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <input aria-label="Поиск торгового объекта по адресу или номеру" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Адрес или номер ТО" className="w-full rounded-md border border-input bg-card px-3 py-2 text-sm" />
+              <select aria-label="Формат торгового объекта" value={format} onChange={(e) => setFormat(e.target.value)} className="w-full rounded-md border border-input bg-card px-3 py-2 text-sm">
+                <option value="">Все форматы</option>
+                {STORE_FORMATS.map((f) => <option key={f} value={f}>{f}</option>)}
+              </select>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">Найдено: {stores.length}</p>
             <div className="mt-2 max-h-64 space-y-1 overflow-y-auto rounded-xl border border-border p-2">
               {stores.map((s) => (
                 <label
@@ -148,16 +155,18 @@ export function RequestDialog({
                 >
                   <input
                     type="checkbox"
+                    disabled={!selected.includes(s.id) && selected.length >= MAX_ITEMS}
                     checked={selected.includes(s.id)}
                     onChange={() => toggle(s.id)}
                     className="size-4 accent-[var(--brand)]"
                   />
                   <span className="flex-1">
-                    {s.address}, {s.city} · {s.number}
+                    {s.address} · {s.number}
                   </span>
                   <span className="text-xs text-muted-foreground">{s.format}</span>
                 </label>
               ))}
+              {!stores.length && <p className="p-3 text-sm text-muted-foreground">Ничего не найдено.</p>}
             </div>
           </div>
         )}
