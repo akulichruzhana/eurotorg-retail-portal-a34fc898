@@ -77,7 +77,7 @@ function AdsPage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {PLACEMENTS.map((p) => (
-                <div key={p.id} className="flex flex-col border border-border bg-card p-5">
+                <div key={p.id} className="flex flex-col rounded-2xl border border-border bg-card p-5">
                   <h3 className="font-bold">{p.name}</h3>
                   <p className="mt-2 flex-1 text-sm text-muted-foreground">{p.description}</p>
                   <p className="mt-4 font-bold">{formatMoney(p.price)}</p>
@@ -94,7 +94,7 @@ function AdsPage() {
       <RequestDialog placement={active} open={!!active} onClose={() => setActive(null)} />
       {details && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-lg bg-card p-6">
+          <div className="w-full max-w-lg rounded-2xl bg-card p-6">
             <div className="flex items-start justify-between gap-4"><h2 className="text-xl font-bold">{details.name}</h2><Button variant="ghost" onClick={() => setDetails(null)}>Закрыть</Button></div>
             <p className="mt-3 text-sm text-muted-foreground">{details.description}</p>
             <p className="mt-4 text-lg font-bold">{formatMoney(details.price)}</p>
