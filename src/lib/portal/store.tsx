@@ -8,7 +8,7 @@ export type RequestItem = {
   placementName: string;
   storeId: string;
   storeAddress: string;
-  price: number;
+  price: number | null;
 };
 
 export type HistoryEntry = { at: string; text: string };
@@ -23,7 +23,7 @@ export type AdRequest = {
   periodFrom: string;
   periodTo: string;
   items: RequestItem[];
-  total: number;
+  total: number | null;
   stage: RequestStage;
   status: string;
   comment?: string | undefined;
@@ -162,7 +162,9 @@ export function PortalProvider({ children }: { children: ReactNode }) {
 
   const createRequest: Ctx["createRequest"] = useCallback(
     ({ items, periodFrom, periodTo, org, source }) => {
-      const total = items.reduce((s, i) => s + i.price, 0);
+      const total = items.some((item) => item.price === null)
+        ? null
+        : items.reduce((sum, item) => sum + (item.price ?? 0), 0);
       const req: AdRequest = {
         id: `r${Math.random().toString(36).slice(2, 9)}`,
         number: `ЗЯВ-${1002 + Math.floor(Math.random() * 8000)}`,
@@ -217,7 +219,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
         const next: RequestStage = req.stage === "legal" ? "retail" : req.stage === "retail" ? "marketing" : "done";
         req.stage = next;
         req.status = STAGE_LABEL[next];
-        if (next === "done") {
+        if (next === "done" && req.total !== null) {
           const inv: Invoice = {
             id: `i${Math.random().toString(36).slice(2, 9)}`,
             number: `СЧ-2026-${String(1000 + Math.floor(Math.random() * 8999)).slice(-4)}`,
@@ -227,8 +229,10 @@ export function PortalProvider({ children }: { children: ReactNode }) {
             createdAt: now(),
             status: "Черновик",
           };
-          invoices = req.total > 0 ? [inv, ...invoices] : invoices;
-          notifications = [notify(req.total > 0 ? `Заявка ${req.number} согласована. Сформирован счёт ${inv.number}.` : `Заявка ${req.number} согласована. Стоимость уточняется.`, req.org), ...notifications];
+          invoices = [inv, ...invoices];
+          notifications = [notify(`Заявка ${req.number} согласована. Сформирован счёт ${inv.number}.`, req.org), ...notifications];
+        } else if (next === "done") {
+          notifications = [notify(`Заявка ${req.number} согласована. Стоимость уточняется.`, req.org), ...notifications];
         } else {
           notifications = [notify(`Заявка ${req.number}: ${STAGE_LABEL[next].toLowerCase()}.`, req.org), ...notifications];
         }
