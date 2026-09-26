@@ -15,9 +15,9 @@ export const Route = createFileRoute("/ads")({
   head: () => ({
     meta: [
       { title: "Каталог размещений — Евроторг Media" },
-      { name: "description", content: "Витрина офлайн- и онлайн-размещений сети Евроопт: форматы, цены, оформление заявки." },
+       { name: "description", content: "Каталог рекламных услуг и торговых объектов Евроторга: адреса, форматы и оформление заявок." },
       { property: "og:title", content: "Каталог размещений — Евроторг Media" },
-      { property: "og:description", content: "Витрина офлайн- и онлайн-размещений сети Евроопт." },
+       { property: "og:description", content: "Рекламные услуги и адреса торговых объектов сети Евроторг." },
        { property: "og:type", content: "website" },
        { name: "twitter:card", content: "summary" },
     ],
@@ -47,8 +47,8 @@ function AdsPage() {
         <Button variant={tab === "all" ? "default" : "outline"} onClick={() => setTab("all")}>Услуги</Button>
         <Button variant={tab === "stores" ? "default" : "outline"} onClick={() => setTab("stores")}>Торговые объекты</Button>
       </div>
-      <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-        <aside className="h-fit border-r border-border pr-5">
+      <div className={tab === "stores" ? "grid gap-6 lg:grid-cols-[260px_1fr]" : ""}>
+        {tab === "stores" && <aside className="h-fit border-r border-border pr-5">
           <h2 className="text-sm font-bold">Поиск ТО</h2>
           <label htmlFor="store-query" className="mt-4 block text-xs font-semibold uppercase text-muted-foreground">Адрес или номер ТО</label>
           <input id="store-query" value={query} onChange={(e) => { setQuery(e.target.value); setPage(0); }} placeholder="Введите адрес или номер" className="mt-2 w-full rounded-md border border-input bg-card px-3 py-2 text-sm" />
@@ -59,7 +59,7 @@ function AdsPage() {
           </select>
           <p className="mt-4 text-xs text-muted-foreground">Найдено: {stores.length.toLocaleString("ru-RU")}</p>
           <Button variant="outline" className="mt-4 w-full" onClick={() => { setQuery(""); setFormat(""); setPage(0); }}>Сбросить</Button>
-        </aside>
+        </aside>}
         <div className="min-w-0">
           {tab === "stores" ? (
             <div>

@@ -59,7 +59,7 @@ export function RequestDialog({
               placementName: placement.name,
               storeId: "online",
               storeAddress: "Онлайн-канал",
-              price: placement.price ?? 0,
+               price: placement.price,
             },
           ]
         : selected.map((id) => {
@@ -70,7 +70,7 @@ export function RequestDialog({
               placementName: placement.name,
               storeId: s.id,
               storeAddress: `${s.address} · ${s.format} · ${s.number}`,
-              price: placement.price ?? 0,
+               price: placement.price,
             };
           }).filter((item): item is RequestItem => item !== null);
 
