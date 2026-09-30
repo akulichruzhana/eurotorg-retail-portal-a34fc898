@@ -16,6 +16,7 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as InvoicesRouteImport } from './routes/invoices'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as OfflineRouteImport } from './routes/offline'
+import { Route as OrderRouteImport } from './routes/order'
 import { Route as QueueRouteImport } from './routes/queue'
 import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -58,6 +59,11 @@ const OfflineRoute = OfflineRouteImport.update({
   path: '/offline',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrderRoute = OrderRouteImport.update({
+  id: '/order',
+  path: '/order',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QueueRoute = QueueRouteImport.update({
   id: '/queue',
   path: '/queue',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/invoices': typeof InvoicesRoute
   '/notifications': typeof NotificationsRoute
   '/offline': typeof OfflineRoute
+  '/order': typeof OrderRoute
   '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
   '/services': typeof ServicesRouteWithChildren
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/invoices': typeof InvoicesRoute
   '/notifications': typeof NotificationsRoute
   '/offline': typeof OfflineRoute
+  '/order': typeof OrderRoute
   '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
   '/services': typeof ServicesRouteWithChildren
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/invoices': typeof InvoicesRoute
   '/notifications': typeof NotificationsRoute
   '/offline': typeof OfflineRoute
+  '/order': typeof OrderRoute
   '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
   '/services': typeof ServicesRouteWithChildren
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/invoices'
     | '/notifications'
     | '/offline'
+    | '/order'
     | '/queue'
     | '/requests'
     | '/services'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/invoices'
     | '/notifications'
     | '/offline'
+    | '/order'
     | '/queue'
     | '/requests'
     | '/services'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/invoices'
     | '/notifications'
     | '/offline'
+    | '/order'
     | '/queue'
     | '/requests'
     | '/services'
@@ -191,6 +203,7 @@ export interface RootRouteChildren {
   InvoicesRoute: typeof InvoicesRoute
   NotificationsRoute: typeof NotificationsRoute
   OfflineRoute: typeof OfflineRoute
+  OrderRoute: typeof OrderRoute
   QueueRoute: typeof QueueRoute
   RequestsRoute: typeof RequestsRoute
   ServicesRoute: typeof ServicesRouteWithChildren
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/offline'
       fullPath: '/offline'
       preLoaderRoute: typeof OfflineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order': {
+      id: '/order'
+      path: '/order'
+      fullPath: '/order'
+      preLoaderRoute: typeof OrderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/queue': {
@@ -314,6 +334,7 @@ const rootRouteChildren: RootRouteChildren = {
   InvoicesRoute: InvoicesRoute,
   NotificationsRoute: NotificationsRoute,
   OfflineRoute: OfflineRoute,
+  OrderRoute: OrderRoute,
   QueueRoute: QueueRoute,
   RequestsRoute: RequestsRoute,
   ServicesRoute: ServicesRouteWithChildren,
