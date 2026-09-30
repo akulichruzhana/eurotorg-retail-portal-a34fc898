@@ -18,7 +18,10 @@ import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as OfflineRouteImport } from './routes/offline'
 import { Route as QueueRouteImport } from './routes/queue'
 import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as StoresRouteImport } from './routes/stores'
 import { Route as TicketsRouteImport } from './routes/tickets'
+import { Route as ServicesServiceIdRouteImport } from './routes/services.$serviceId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -65,10 +68,25 @@ const RequestsRoute = RequestsRouteImport.update({
   path: '/requests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoresRoute = StoresRouteImport.update({
+  id: '/stores',
+  path: '/stores',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TicketsRoute = TicketsRouteImport.update({
   id: '/tickets',
   path: '/tickets',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
+  id: '/$serviceId',
+  path: '/$serviceId',
+  getParentRoute: () => ServicesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -81,7 +99,10 @@ export interface FileRoutesByFullPath {
   '/offline': typeof OfflineRoute
   '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
+  '/services': typeof ServicesRouteWithChildren
+  '/stores': typeof StoresRoute
   '/tickets': typeof TicketsRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -93,7 +114,10 @@ export interface FileRoutesByTo {
   '/offline': typeof OfflineRoute
   '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
+  '/services': typeof ServicesRouteWithChildren
+  '/stores': typeof StoresRoute
   '/tickets': typeof TicketsRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -106,7 +130,10 @@ export interface FileRoutesById {
   '/offline': typeof OfflineRoute
   '/queue': typeof QueueRoute
   '/requests': typeof RequestsRoute
+  '/services': typeof ServicesRouteWithChildren
+  '/stores': typeof StoresRoute
   '/tickets': typeof TicketsRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,7 +147,10 @@ export interface FileRouteTypes {
     | '/offline'
     | '/queue'
     | '/requests'
+    | '/services'
+    | '/stores'
     | '/tickets'
+    | '/services/$serviceId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -132,7 +162,10 @@ export interface FileRouteTypes {
     | '/offline'
     | '/queue'
     | '/requests'
+    | '/services'
+    | '/stores'
     | '/tickets'
+    | '/services/$serviceId'
   id:
     | '__root__'
     | '/'
@@ -144,7 +177,10 @@ export interface FileRouteTypes {
     | '/offline'
     | '/queue'
     | '/requests'
+    | '/services'
+    | '/stores'
     | '/tickets'
+    | '/services/$serviceId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -157,6 +193,8 @@ export interface RootRouteChildren {
   OfflineRoute: typeof OfflineRoute
   QueueRoute: typeof QueueRoute
   RequestsRoute: typeof RequestsRoute
+  ServicesRoute: typeof ServicesRouteWithChildren
+  StoresRoute: typeof StoresRoute
   TicketsRoute: typeof TicketsRoute
 }
 
@@ -225,6 +263,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stores': {
+      id: '/stores'
+      path: '/stores'
+      fullPath: '/stores'
+      preLoaderRoute: typeof StoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tickets': {
       id: '/tickets'
       path: '/tickets'
@@ -232,8 +284,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/$serviceId': {
+      id: '/services/$serviceId'
+      path: '/$serviceId'
+      fullPath: '/services/$serviceId'
+      preLoaderRoute: typeof ServicesServiceIdRouteImport
+      parentRoute: typeof ServicesRoute
+    }
   }
 }
+
+interface ServicesRouteChildren {
+  ServicesServiceIdRoute: typeof ServicesServiceIdRoute
+}
+
+const ServicesRouteChildren: ServicesRouteChildren = {
+  ServicesServiceIdRoute: ServicesServiceIdRoute,
+}
+
+const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
+  ServicesRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -245,6 +316,8 @@ const rootRouteChildren: RootRouteChildren = {
   OfflineRoute: OfflineRoute,
   QueueRoute: QueueRoute,
   RequestsRoute: RequestsRoute,
+  ServicesRoute: ServicesRouteWithChildren,
+  StoresRoute: StoresRoute,
   TicketsRoute: TicketsRoute,
 }
 export const routeTree = rootRouteImport

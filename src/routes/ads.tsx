@@ -1,107 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { AppShell, PageHeader } from "@/components/portal/AppShell";
-import { RequestDialog } from "@/components/portal/RequestDialog";
-import {
-  PLACEMENTS,
-  STORES,
-  STORE_FORMATS,
-  formatMoney,
-  type Placement,
-} from "@/lib/portal/data";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { ArrowRight, CalendarDays, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-export const Route = createFileRoute("/ads")({
-  head: () => ({
-    meta: [
-      { title: "Каталог размещений — Евроторг Media" },
-       { name: "description", content: "Каталог рекламных услуг и торговых объектов Евроторга: адреса, форматы и оформление заявок." },
-      { property: "og:title", content: "Каталог размещений — Евроторг Media" },
-       { property: "og:description", content: "Рекламные услуги и адреса торговых объектов сети Евроторг." },
-       { property: "og:type", content: "website" },
-       { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: AdsPage,
-});
-
-type Tab = "all" | "stores";
-const PAGE_SIZE = 40;
-
-function AdsPage() {
-  const [tab, setTab] = useState<Tab>("all");
-  const [format, setFormat] = useState("");
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(0);
-  const [active, setActive] = useState<Placement | null>(null);
-  const [details, setDetails] = useState<Placement | null>(null);
-  const stores = useMemo(() => STORES.filter((s) =>
-    (!format || s.format === format) &&
-    (!query.trim() || `${s.address} ${s.number}`.toLocaleLowerCase("ru").includes(query.trim().toLocaleLowerCase("ru")))
-  ), [format, query]);
-
-  return (
-    <AppShell>
-      <PageHeader title="Каталог размещений" subtitle="Услуги и торговые объекты сети Евроторг" />
-      <div className="mb-6 flex gap-2">
-        <Button variant={tab === "all" ? "default" : "outline"} onClick={() => setTab("all")}>Услуги</Button>
-        <Button variant={tab === "stores" ? "default" : "outline"} onClick={() => setTab("stores")}>Торговые объекты</Button>
-      </div>
-      <div className={tab === "stores" ? "grid gap-6 lg:grid-cols-[260px_1fr]" : ""}>
-        {tab === "stores" && <aside className="h-fit border-r border-border pr-5">
-          <h2 className="text-sm font-bold">Поиск ТО</h2>
-          <label htmlFor="store-query" className="mt-4 block text-xs font-semibold uppercase text-muted-foreground">Адрес или номер ТО</label>
-          <input id="store-query" value={query} onChange={(e) => { setQuery(e.target.value); setPage(0); }} placeholder="Введите адрес или номер" className="mt-2 w-full rounded-md border border-input bg-card px-3 py-2 text-sm" />
-          <label htmlFor="store-format" className="mt-5 block text-xs font-semibold uppercase text-muted-foreground">Формат ТО</label>
-          <select id="store-format" value={format} onChange={(e) => { setFormat(e.target.value); setPage(0); }} className="mt-2 w-full rounded-md border border-input bg-card px-3 py-2 text-sm">
-            <option value="">Все форматы</option>
-            {STORE_FORMATS.map((f) => <option key={f} value={f}>{f}</option>)}
-          </select>
-          <p className="mt-4 text-xs text-muted-foreground">Найдено: {stores.length.toLocaleString("ru-RU")}</p>
-          <Button variant="outline" className="mt-4 w-full" onClick={() => { setQuery(""); setFormat(""); setPage(0); }}>Сбросить</Button>
-        </aside>}
-        <div className="min-w-0">
-          {tab === "stores" ? (
-            <div>
-              <div className="overflow-x-auto border border-border bg-card">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted text-left"><tr><th className="px-4 py-3">Номер ТО</th><th className="px-4 py-3">Формат</th><th className="px-4 py-3">Адрес торгового объекта</th></tr></thead>
-                  <tbody>{stores.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map((s) => (
-                    <tr key={s.id} className="border-t border-border"><td className="px-4 py-3">{s.number}</td><td className="px-4 py-3">{s.format}</td><td className="px-4 py-3 font-medium">{s.address}</td></tr>
-                  ))}</tbody>
-                </table>
-                {!stores.length && <p className="p-4 text-sm text-muted-foreground">Торговые объекты не найдены.</p>}
-              </div>
-              <div className="mt-4 flex items-center justify-between gap-3 text-sm"><Button variant="outline" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>Назад</Button><span>{stores.length ? `${page * PAGE_SIZE + 1}–${Math.min((page + 1) * PAGE_SIZE, stores.length)} из ${stores.length}` : "0 объектов"}</span><Button variant="outline" disabled={(page + 1) * PAGE_SIZE >= stores.length} onClick={() => setPage((p) => p + 1)}>Далее</Button></div>
-            </div>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {PLACEMENTS.map((p) => (
-                <div key={p.id} className="flex flex-col rounded-2xl border border-border bg-card p-5">
-                  <h3 className="font-bold">{p.name}</h3>
-                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{p.description}</p>
-                  <p className="mt-4 font-bold">{formatMoney(p.price)}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Button onClick={() => setActive(p)}>Оформить заявку</Button>
-                    <Button variant="outline" onClick={() => setDetails(p)}>Подробнее</Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-      <RequestDialog placement={active} open={!!active} onClose={() => setActive(null)} />
-      {details && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-lg rounded-2xl bg-card p-6">
-            <div className="flex items-start justify-between gap-4"><h2 className="text-xl font-bold">{details.name}</h2><Button variant="ghost" onClick={() => setDetails(null)}>Закрыть</Button></div>
-            <p className="mt-3 text-sm text-muted-foreground">{details.description}</p>
-            <p className="mt-4 text-lg font-bold">{formatMoney(details.price)}</p>
-            <Button className="mt-5 w-full" onClick={() => { setActive(details); setDetails(null); }}>Оформить заявку</Button>
-          </div>
-        </div>
-      )}
-    </AppShell>
-  );
-}
+import { AppShell } from "@/components/portal/AppShell";
+import { ServiceCatalogue } from "@/components/portal/ServiceCatalogue";
+import { STORE_FORMATS } from "@/lib/portal/data";
+export const Route = createFileRoute("/ads")({head:()=>({meta:[{title:"Главная — Евроторг Media"},{name:"description",content:"Рекламные услуги, торговые объекты и заявки сети Евроторг."},{property:"og:title",content:"Евроторг Media — главная"},{property:"og:description",content:"Выберите рекламные услуги и торговые объекты Евроторга."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary"}]}),component:AdsPage});
+function AdsPage(){const [where,setWhere]=useState("");const [format,setFormat]=useState("");const [date,setDate]=useState("");return <AppShell>
+  <section className="flex min-h-[320px] flex-col items-center justify-center bg-muted px-6 py-12 text-center"><h1 className="max-w-2xl text-3xl font-extrabold uppercase leading-tight sm:text-5xl">Какой ТО продаст ваш рекламный текст</h1><div className="mt-8 flex flex-wrap justify-center gap-3"><Button size="lg" asChild><Link to="/services">Заказать рекламные услуги</Link></Button><Button size="lg" variant="secondary" asChild><Link to="/stores">Выбрать торговые объекты</Link></Button></div></section>
+  <div className="mt-8 grid gap-2 rounded border border-foreground p-2 md:grid-cols-[1fr_1fr_1fr_auto]"><label className="relative"><span className="sr-only">Где разместить рекламу?</span><input value={where} onChange={(e)=>setWhere(e.target.value)} placeholder="Где разместить рекламу?" className="w-full border-0 px-4 py-2 text-sm"/><ChevronDown className="pointer-events-none absolute right-3 top-2.5 size-4"/></label><label className="relative"><span className="sr-only">Формат торгового объекта</span><select value={format} onChange={(e)=>setFormat(e.target.value)} className="w-full border-0 px-4 py-2 text-sm"><option value="">Какие форматы использовать?</option>{STORE_FORMATS.map((f)=><option key={f}>{f}</option>)}</select></label><label className="relative flex items-center"><CalendarDays className="ml-3 size-4"/><span className="sr-only">Когда?</span><input type="date" value={date} onChange={(e)=>setDate(e.target.value)} className="min-w-0 flex-1 border-0 px-3 py-2 text-sm"/></label><Button asChild><Link to="/stores">Подобрать объекты <ArrowRight /></Link></Button></div>
+  <section className="mt-14"><div className="mb-6 flex items-center justify-between gap-4"><h2 className="text-2xl font-bold">Рекламные услуги</h2><Button size="sm" variant="secondary" asChild><Link to="/services">Показать все форматы</Link></Button></div><ServiceCatalogue compact /></section>
+  <section className="mt-14 flex min-h-56 items-center justify-center bg-muted px-6 text-center"><div><h2 className="text-xl font-bold">Реклама в сети Евроторг</h2><p className="mt-2 text-sm text-muted-foreground">Выберите торговые объекты и рекламные форматы для своей кампании.</p><Button className="mt-5" asChild><Link to="/order">Оформить заявку</Link></Button></div></section>
+</AppShell>}
