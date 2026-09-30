@@ -162,3 +162,38 @@
     letter-spacing: -0.01em;
   }
 }
+
+/* Signed-in retail media portal: isolated so the existing sign-in screen remains untouched. */
+.portal-app {
+  --radius: 0.35rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.12 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.12 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.12 0 0);
+  --primary: oklch(0.12 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0.008 265);
+  --secondary-foreground: oklch(0.12 0 0);
+  --muted: oklch(0.96 0.008 265);
+  --muted-foreground: oklch(0.49 0.01 265);
+  --accent: oklch(0.93 0.008 265);
+  --accent-foreground: oklch(0.12 0 0);
+  --border: oklch(0.88 0.006 265);
+  --input: oklch(0.86 0.006 265);
+  --ring: oklch(0.68 0.17 132);
+  --brand: oklch(0.15 0 0);
+  --brand-dark: oklch(0.12 0 0);
+  --brand-soft: oklch(0.94 0.008 265);
+  --brand-accent: oklch(0.74 0.18 131);
+  background: var(--background);
+  color: var(--foreground);
+}
+.portal-app .bg-portal-mark { background-color: var(--border); }
+.portal-app .bg-brand-accent { background-color: var(--brand-accent); }
+.portal-app h1, .portal-app h2, .portal-app h3 { letter-spacing: 0; }
+.portal-app :is(input,select,textarea) { background-color: var(--card); }
+.portal-app :is(input,select,textarea):focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+.portal-app :is(.rounded-2xl,.rounded-3xl,.rounded-xl) { border-radius: 6px; }
+.portal-app .rounded-full { border-radius: 4px; }
