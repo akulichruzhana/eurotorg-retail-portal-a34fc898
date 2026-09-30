@@ -11,3 +11,4 @@
 
 - Keep the advertising catalogue sourced from `services.json` and `stores.json`, derived from the supplied documents, so all portal roles see one consistent list.
 - Represent unpublished service prices as `null` throughout requests and totals; never invent a price or generate an invoice for an unpriced request.
+- Scope the wireframe-inspired visual theme to the signed-in portal shell, leaving the existing sign-in appearance intact; shared portal navigation and footer live in AppShell.
