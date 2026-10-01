@@ -3,9 +3,9 @@ import { Check, ChevronDown, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { STORES, STORE_FORMATS } from "@/lib/portal/data";
 
-export function StorePicker({ selected, onChange, max = 12 }: { selected: string[]; onChange: (ids: string[]) => void; max?: number }) {
-  const [search, setSearch] = useState("");
-  const [format, setFormat] = useState("");
+export function StorePicker({ selected, onChange, max = 12, initialQuery = "", initialFormat = "" }: { selected: string[]; onChange: (ids: string[]) => void; max?: number; initialQuery?: string; initialFormat?: string }) {
+  const [search, setSearch] = useState(initialQuery);
+  const [format, setFormat] = useState(initialFormat);
   const [city, setCity] = useState("");
   const cities = useMemo(() => [...new Set(STORES.map((s) => s.address.split(",")[0]?.trim()).filter((c): c is string => !!c))].sort((a,b) => a.localeCompare(b,"ru")), []);
   const filtered = useMemo(() => STORES.filter((s) => (!format || s.format === format) && (!city || s.address.startsWith(city)) && (!search.trim() || `${s.address} ${s.number}`.toLocaleLowerCase("ru").includes(search.trim().toLocaleLowerCase("ru")))), [search, format, city]);

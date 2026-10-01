@@ -54,7 +54,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/analytics" className={cn("rounded px-3 py-2", pathname === "/analytics" ? "bg-foreground text-card" : "hover:bg-card")}>Онлайн реклама</Link>
         </div>
         <div className="flex items-center gap-3 text-sm">
-          <Link to="/requests" className="flex items-center gap-1.5 hover:text-muted-foreground"><ShoppingCart className="size-4" /> Мои заявки <span className="text-muted-foreground">{visibleRequests.length}</span></Link>
+          <Link to={CLIENTS.includes(user.role) ? "/requests" : "/queue"} className="flex items-center gap-1.5 hover:text-muted-foreground"><ShoppingCart className="size-4" /> Мои заявки <span className="text-muted-foreground">{visibleRequests.length}</span></Link>
           <Link to="/notifications" aria-label={`Уведомления: ${unread}`} className="relative p-1"><Bell className="size-4" />{unread > 0 && <span className="absolute -right-1 -top-1 size-2 rounded-full bg-brand-accent" />}</Link>
           <span className="hidden items-center gap-1 border-l border-border pl-3 text-xs sm:flex"><UserRound className="size-4" /> {user.login} <ChevronDown className="size-3" /></span>
           <Button variant="ghost" size="icon" title="Выйти" aria-label="Выйти" onClick={() => { logout(); navigate({ to: "/" }); }}><LogOut className="size-4" /></Button>
