@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { AppShell, PageHeader, RoleGuard } from "@/components/portal/AppShell";
 import { formatMoney } from "@/lib/portal/data";
 import { fmtDate, stageForRole, usePortal } from "@/lib/portal/store";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/queue")({
   head: () => ({
@@ -75,26 +76,26 @@ function QueuePage() {
                     />
                     <button
                       onClick={() => {
-                        decideRequest(r.id, true, comments[r.id] ?? "", user!.role);
+                        decideRequest(r.id, true, comments[r.id] ?? "", user.role);
                         toast.success(`Заявка ${r.number} принята`);
                       }}
-                      className="rounded-full bg-brand px-5 py-2 text-sm font-bold text-primary-foreground hover:bg-brand-dark"
+                      className="text-sm"
                     >
                       Принять
-                    </button>
+                    </Button>
                     <button
                       onClick={() => {
                         if (!comments[r.id]?.trim()) {
                           toast.error("Укажите причину отклонения");
                           return;
                         }
-                        decideRequest(r.id, false, comments[r.id] ?? "", user!.role);
+                        decideRequest(r.id, false, comments[r.id] ?? "", user.role);
                         toast.message(`Заявка ${r.number} отклонена`);
                       }}
-                      className="rounded-full border border-destructive px-5 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                      variant="outline" className="border-destructive text-destructive hover:bg-destructive/10"
                     >
                       Отклонить
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
