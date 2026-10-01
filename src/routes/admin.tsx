@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AppShell, PageHeader, RoleGuard } from "@/components/portal/AppShell";
 import { TARIFFS, USERS, formatMoney } from "@/lib/portal/data";
 import { usePortal } from "@/lib/portal/store";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -44,7 +44,7 @@ function AdminPage() {
               )}
             >
               {t.label}
-            </button>
+            </Button>
           ))}
         </div>
 

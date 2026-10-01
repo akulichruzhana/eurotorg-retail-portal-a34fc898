@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AppShell, PageHeader, RoleGuard } from "@/components/portal/AppShell";
 import { RequestDialog } from "@/components/portal/RequestDialog";
 import { PLACEMENTS, formatMoney, type Placement } from "@/lib/portal/data";
+import { Button } from "@/components/ui/button";
 
 const ORGS = ["ООО «Альфа»", "ООО «Гамма»", "ООО «Бета»"];
 
@@ -53,10 +54,10 @@ function OfflinePage() {
               <p className="mt-3 font-bold">{formatMoney(p.price)}</p>
               <button
                 onClick={() => setActive(p)}
-                className="mt-3 rounded-full bg-brand px-5 py-2.5 text-sm font-bold text-primary-foreground hover:bg-brand-dark"
+                className="mt-3"
               >
                 Оформить за клиента
-              </button>
+              </Button>
             </div>
           ))}
         </div>

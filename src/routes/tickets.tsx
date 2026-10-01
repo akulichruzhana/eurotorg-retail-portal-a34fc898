@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell, PageHeader } from "@/components/portal/AppShell";
 import { fmtDate, usePortal } from "@/lib/portal/store";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/tickets")({
   head: () => ({
@@ -55,9 +56,9 @@ function TicketsPage() {
             rows={5}
             className="mt-1.5 w-full rounded-xl border border-input px-3 py-2"
           />
-          <button className="mt-4 w-full rounded-full bg-brand py-2.5 font-bold text-primary-foreground hover:bg-brand-dark">
+          <Button type="submit" className="mt-4 w-full">
             Отправить
-          </button>
+          </Button>
         </form>
 
         <div className="space-y-4">

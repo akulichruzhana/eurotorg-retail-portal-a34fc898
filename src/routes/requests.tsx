@@ -4,6 +4,7 @@ import { AppShell, PageHeader, RoleGuard } from "@/components/portal/AppShell";
 import { formatMoney } from "@/lib/portal/data";
 import { fmtDate, usePortal, type AdRequest } from "@/lib/portal/store";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/requests")({
   head: () => ({
@@ -62,12 +63,12 @@ function RequestsPage() {
                 <div className="flex items-center gap-3">
                   <StatusBadge request={r} />
                   <span className="font-bold">{formatMoney(r.total)}</span>
-                  <button
+                  <Button variant="outline"
                     onClick={() => setOpen(open === r.id ? null : r.id)}
-                    className="rounded-full border border-border px-4 py-1.5 text-sm hover:bg-muted"
+                    className="text-sm"
                   >
                     {open === r.id ? "Скрыть" : "Детали"}
-                  </button>
+                  </Button>
                 </div>
               </div>
 

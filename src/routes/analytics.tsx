@@ -5,6 +5,7 @@ import { AppShell, PageHeader, RoleGuard } from "@/components/portal/AppShell";
 import { RequestDialog } from "@/components/portal/RequestDialog";
 import { INSIGHTS, LIFT_PAIRS, PLACEMENTS, SEGMENTS, type Placement } from "@/lib/portal/data";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/analytics")({
   head: () => ({
@@ -37,7 +38,7 @@ function AnalyticsPage() {
               { id: "qlik", label: "Qlik" },
             ] as const
           ).map((t) => (
-            <button
+            <Button
               key={t.id}
               onClick={() => setTab(t.id)}
               className={cn(
@@ -46,7 +47,7 @@ function AnalyticsPage() {
               )}
             >
               {t.label}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -98,12 +99,12 @@ function AnalyticsPage() {
                 </tbody>
               </table>
               <div className="p-5">
-                <button
+                <Button
                   onClick={() => setActive(PLACEMENTS[0] ?? null)}
-                  className="rounded-full bg-brand px-5 py-2.5 text-sm font-bold text-primary-foreground hover:bg-brand-dark"
+                  
                 >
                   Запустить кампанию
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -128,15 +129,15 @@ function AnalyticsPage() {
                     <td className="px-5 py-3">{s.name}</td>
                     <td className="px-5 py-3">{s.size.toLocaleString("ru-RU")}</td>
                     <td className="px-5 py-3 text-right">
-                      <button
+                      <Button
                         onClick={() => {
                           toast.info(`Кампания на сегмент «${s.name}»`);
                           setActive(PLACEMENTS.find((p) => p.kind === "online") ?? null);
                         }}
-                        className="rounded-full bg-brand px-4 py-2 text-xs font-bold text-primary-foreground hover:bg-brand-dark"
+                        size="sm"
                       >
                         Кампания
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 ))}
