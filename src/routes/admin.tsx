@@ -35,13 +35,10 @@ function AdminPage() {
               { id: "stats", label: "Сводка" },
             ] as const
           ).map((t) => (
-            <button
+            <Button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={cn(
-                "rounded-full border px-5 py-2 text-sm font-medium",
-                tab === t.id ? "border-brand bg-brand text-primary-foreground" : "border-border bg-card hover:bg-muted",
-              )}
+              variant={tab === t.id ? "default" : "outline"}
             >
               {t.label}
             </Button>

@@ -74,7 +74,7 @@ function QueuePage() {
                       onChange={(e) => setComments((p) => ({ ...p, [r.id]: e.target.value }))}
                       className="min-w-[220px] flex-1 rounded-xl border border-input px-3 py-2 text-sm"
                     />
-                    <button
+                    <Button
                       onClick={() => {
                         decideRequest(r.id, true, comments[r.id] ?? "", user.role);
                         toast.success(`Заявка ${r.number} принята`);
@@ -83,7 +83,7 @@ function QueuePage() {
                     >
                       Принять
                     </Button>
-                    <button
+                    <Button
                       onClick={() => {
                         if (!comments[r.id]?.trim()) {
                           toast.error("Укажите причину отклонения");
