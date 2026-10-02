@@ -9,4 +9,4 @@
 
 - [x] Recreate the reference header, main page, services, stores, and order screens while leaving sign-in unchanged.
 - [x] Restyle the remaining role-specific pages consistently without changing their workflows.
-- [ ] Check desktop/mobile screens and complete a real request flow.
+- [x] Check desktop/mobile screens and complete a real request flow.
