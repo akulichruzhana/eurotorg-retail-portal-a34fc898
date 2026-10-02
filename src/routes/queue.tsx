@@ -76,6 +76,7 @@ function QueuePage() {
                     />
                     <Button
                       onClick={() => {
+                        if (!user) return;
                         decideRequest(r.id, true, comments[r.id] ?? "", user.role);
                         toast.success(`Заявка ${r.number} принята`);
                       }}
@@ -89,6 +90,7 @@ function QueuePage() {
                           toast.error("Укажите причину отклонения");
                           return;
                         }
+                        if (!user) return;
                         decideRequest(r.id, false, comments[r.id] ?? "", user.role);
                         toast.message(`Заявка ${r.number} отклонена`);
                       }}
