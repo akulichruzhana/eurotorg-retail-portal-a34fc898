@@ -68,7 +68,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <footer className="mt-12 bg-foreground text-card"><div className="mx-auto grid max-w-7xl gap-8 px-5 py-10 lg:grid-cols-[1fr_1fr_auto] lg:px-8">
       <div><p className="text-lg font-bold">евроторг реклама</p><p className="mt-3 max-w-xs text-xs leading-relaxed text-card/60">Рекламные возможности торговой сети Евроторг</p></div>
       <div className="flex flex-wrap content-start gap-x-6 gap-y-3 text-xs">{items.slice(0, 8).map((item) => <Link key={item.to} to={item.to} className="hover:underline">{item.label}</Link>)}</div>
-      <div className="flex flex-col gap-2"><Button variant="secondary" asChild><Link to="/services">Заказать услуги</Link></Button><Button variant="outline" asChild><Link to="/tickets">Получить консультацию</Link></Button></div>
+       <div className="flex flex-col gap-2"><Button variant="secondary" asChild><Link to="/services">Заказать услуги</Link></Button><Button variant="outline" className="text-card hover:text-foreground" asChild><Link to="/tickets">Получить консультацию</Link></Button></div>
     </div></footer>
   </div>;
 }

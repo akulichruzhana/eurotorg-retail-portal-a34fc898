@@ -197,3 +197,12 @@
 .portal-app :is(input,select,textarea):focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
 .portal-app :is(.rounded-2xl,.rounded-3xl,.rounded-xl) { border-radius: 6px; }
 .portal-app .rounded-full { border-radius: 4px; }
+.portal-app main :is(table, ul) { max-width: 100%; }
+.portal-app main table { border-collapse: collapse; }
+.portal-app main :is(th, td) { vertical-align: top; }
+.portal-app main :is(input,select,textarea) { max-width: 100%; }
+@media (max-width: 640px) {
+  .portal-app main { min-width: 0; }
+  .portal-app main h1 { font-size: 1.5rem; line-height: 1.25; }
+  .portal-app main :is(th,td) { padding-inline: 0.75rem; }
+}

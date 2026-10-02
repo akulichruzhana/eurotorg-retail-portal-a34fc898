@@ -52,7 +52,7 @@ function OfflinePage() {
               <h3 className="mt-1 font-bold">{p.name}</h3>
               <p className="mt-2 flex-1 text-sm text-muted-foreground">{p.description}</p>
               <p className="mt-3 font-bold">{formatMoney(p.price)}</p>
-              <button
+              <Button
                 onClick={() => setActive(p)}
                 className="mt-3"
               >
